@@ -1,42 +1,37 @@
-import { useState } from 'react';
 import './App.css';
+import { Routes, Route, Link } from "react-router-dom";
+import { useAuth } from "./Context/AuthContext";
 
 // components
 import Users from './Components/AddUsers/Users';
+import Home from './Components/Home/Home';
+import SignIn from './Components/SignIn/SignIn';
+import SignUp from './Components/SignUp/SignUp';
+import Profile from './Components/Profile/Profile';
 
-// firebase
-import { db } from "./firebase";
-import { useAuth } from './Context/AuthContext';
 
 function App() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { currentUser, register } = useAuth();
-
-  const signUp = () => {
-    register(email, password)
-      .then((userCredential) => console.log(userCredential))
-      .catch((err) => {
-        const errCode = err.code;
-        const errMessage = err.message;
-        console.log(errCode);
-        console.log(errMessage);
-      });
-  }
+  const { currentUser } = useAuth();
 
   return (
     <div className="App">
-      <button>Sign in with Google</button>
-      <p>{JSON.stringify(currentUser)}</p>
+      <nav>
+        <Link to="/">Home</Link> |{" "}
+        <Link to="/profile">Profile</Link> |{" "}
+        <Link to="/signin">Sign In</Link> |{" "}
+        <Link to="/signup">Sign Up</Link> |{" "}
+        <Link to="/logout">Logout</Link>
+      </nav>
 
-      <div>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} name="email" type="email" autoComplete='email' placeholder='Email' />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} name="password" type="password" placeholder='Password' />
-        <button onClick={signUp}>Sign up</button>
-      </div>
+      <pre>Current user: {JSON.stringify(currentUser, null, 2)}</pre>
 
-      <Users db={db} />
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
+      </Routes>
+      {/* <Users db={db} /> */}
     </div>
   );
 }
