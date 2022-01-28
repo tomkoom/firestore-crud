@@ -1,20 +1,33 @@
 import React, { useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+// hooks
+import useMounted from "../../Hooks/useMounted";
 
 const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const { register } = useAuth();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { register, signInWithGoogle } = useAuth();
+	const navigate = useNavigate();
+	// avoid memory leaks
+	const mounted = useMounted;
 
 	const signUp = () => {
+		if (!email || !password) {
+			alert("Enter email / password.");
+		}
+		setIsSubmitting(true);
 		register(email, password)
-			.then((userCredential) => console.log(userCredential.user))
-			.catch((err) => {
-				// const errCode = err.code;
-				const errMessage = err.message;
-				alert(errMessage);
-			});
+			.then((userCredential) => {
+				console.log(userCredential.user);
+				navigate("/profile");
+			})
+			.catch((err) => alert(err.message))
+			.finally(() => mounted.current && setIsSubmitting(false));
 	};
+
 	return (
 		<div>
 			<h2>Sign Up</h2>
@@ -34,7 +47,21 @@ const SignUp = () => {
 					type="password"
 					placeholder="Password"
 				/>
-				<button onClick={signUp}>Sign up</button>
+				{!isSubmitting ? "Sign up" : "Signing up..."}
+			</div>
+			<div>
+				<button
+					onClick={() =>
+						signInWithGoogle()
+							.then((userCredential) => {
+								console.log(userCredential.user);
+								navigate("/profile");
+							})
+							.catch((err) => alert(err.message))
+					}
+				>
+					{!isSubmitting ? "Sign up with Google" : "Signing up..."}
+				</button>
 			</div>
 		</div>
 	);

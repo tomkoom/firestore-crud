@@ -11,7 +11,7 @@ import Profile from './Components/Profile/Profile';
 
 
 function App() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   return (
     <div className="App">
@@ -20,7 +20,10 @@ function App() {
         <Link to="/profile">Profile</Link> |{" "}
         <Link to="/signin">Sign In</Link> |{" "}
         <Link to="/signup">Sign Up</Link> |{" "}
-        <Link to="/logout">Logout</Link>
+        <Link to="/logout" onClick={async (e) => {
+          e.preventDefault();
+          logout();
+        }}>Logout</Link>
       </nav>
 
       <pre>Current user: {JSON.stringify(currentUser, null, 2)}</pre>
