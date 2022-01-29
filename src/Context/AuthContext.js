@@ -7,7 +7,7 @@ import {
 	signOut,
 	GoogleAuthProvider,
 	signInWithPopup,
-	signInWithRedirect,
+	// signInWithRedirect,
 } from "firebase/auth"
 
 const AuthContext = createContext();
@@ -40,12 +40,12 @@ export default function AuthContextProvider({ children }) {
 		return signOut(auth);
 	}
 
-	function signInWithGoogle() {
+	async function signInWithGoogle() {
 		const provider = new GoogleAuthProvider();
 		provider.setCustomParameters({
 			prompt: "select_account"
 		});
-		return signInWithRedirect(auth, provider);
+		return signInWithPopup(auth, provider);
 	}
 
 	const value = {

@@ -1,0 +1,23 @@
+/* sign in */
+
+.signIn__form {
+	display: inline-block;
+	box-shadow: 0 0 0 1px #e0e0e0;
+	padding: 1rem;
+	border-radius: 0.5rem;
+}
+
+.signIn__form__password {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.signIn__form button {
+	width: 100%;
+}
+
+.hr {
+	margin: 1rem 0;
+}
